@@ -1,0 +1,4 @@
+/home/hxtruong/CLionProjects/QtTest/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/hxtruong/CLionProjects/QtTest/cmake-build-debug/CMakeFiles/QtTest.dir
+/home/hxtruong/CLionProjects/QtTest/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/hxtruong/CLionProjects/QtTest/cmake-build-debug/CMakeFiles/QtTest_autogen.dir
