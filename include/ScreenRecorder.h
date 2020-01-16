@@ -50,6 +50,7 @@ extern "C"
 
 }
 
+using namespace std;
 
 class ScreenRecorder {
 private:
@@ -57,6 +58,7 @@ private:
     AVOutputFormat *output_format;
 
     AVCodecContext *pAVCodecContext;
+    AVCodecParameters  *pAVCodecParameters;
 
     AVFormatContext *pAVFormatContext;
 
@@ -94,11 +96,14 @@ public:
     ~ScreenRecorder();
 
     /* function to initiate communication with display library */
-    int openCamera();
+    bool OpenCamera();
+    void Show_dshow_device();
 //
 //    int init_outputfile();
 //
 //    int CaptureVideoFrames();
+
+    void HandleAVError(int err, string msg);
 
 };
 

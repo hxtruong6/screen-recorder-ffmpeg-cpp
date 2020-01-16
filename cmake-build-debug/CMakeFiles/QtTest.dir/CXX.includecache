@@ -62,6 +62,10 @@ libavutil/file.h
 libswscale/swscale.h
 /home/hxtruong/CLionProjects/QtTest/include/libswscale/swscale.h
 
+/home/hxtruong/CLionProjects/QtTest/main.cpp
+include/ScreenRecorder.h
+/home/hxtruong/CLionProjects/QtTest/include/ScreenRecorder.h
+
 /home/hxtruong/CLionProjects/QtTest/src/ScreenRecorder.cpp
 ../include/ScreenRecorder.h
 /home/hxtruong/CLionProjects/QtTest/include/ScreenRecorder.h

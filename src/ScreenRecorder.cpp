@@ -4,11 +4,11 @@
 
 #include "../include/ScreenRecorder.h"
 
-using namespace std;
-
 /* initialize the resources*/
 ScreenRecorder::ScreenRecorder() {
     //TODO: check this
+    av_register_all();
+    avformat_network_init();
     avdevice_register_all();
     cout << "\nall required functions are registered successfully";
 }
@@ -148,13 +148,43 @@ ScreenRecorder::~ScreenRecorder() {
 //
 //}
 
-/* establishing the connection between camera or screen through its respective folder */
-int ScreenRecorder::openCamera() {
+//Show Dshow Device
+void ScreenRecorder::Show_dshow_device() {
+    av_register_all();
+    avformat_network_init();
+    avdevice_register_all();
+    AVFormatContext *pFormatCtx = avformat_alloc_context();
+    AVDictionary *options = NULL;
+    av_dict_set(&options, "video_size", "640x480", 0);
+    AVInputFormat *iformat = av_find_input_format("x11grab");
 
+    printf("========Device Info=============\n");
+    int ret = avformat_open_input(&pFormatCtx, ":1.0+10,20", iformat, &options);
+    cout << ret << endl;
+
+    if (ret < 0) {
+        char errmsg[5000];
+        av_strerror(ret, errmsg, 5000);
+        av_log(NULL, AV_LOG_FATAL, "Could not open codec: %s\n", errmsg);
+        exit(-2);
+    }
+    printf("================================\n");
+}
+
+void ScreenRecorder::HandleAVError(int err, string msg = "") {
+    if (err < 0) {
+        char errmsg[5000];
+        av_strerror(err, errmsg, 5000);
+        av_log(NULL, AV_LOG_FATAL, "[Handle AV error]%s: %s\n", msg.c_str(), errmsg);
+        exit(1);
+    }
+}
+
+/* establishing the connection between camera or screen through its respective folder */
+bool ScreenRecorder::OpenCamera() {
     value = 0;
     options = NULL;
     pAVFormatContext = NULL;
-
     pAVFormatContext = avformat_alloc_context();//Allocate an AVFormatContext.
 /*
 
@@ -165,7 +195,16 @@ refer : https://www.ffmpeg.org/ffmpeg-devices.html#x11grab
 */
     /* current below is for screen recording. to connect with camera use v4l2 as a input parameter for av_find_input_format */
     pAVInputFormat = av_find_input_format("x11grab");
-    value = avformat_open_input(&pAVFormatContext, ":0.0+10,50", pAVInputFormat, NULL);
+
+    //Set some options
+    //grabbing frame rate
+    //av_dict_set(&options,"framerate","5",0);
+    //Make the grabbed area follow the mouse
+    //av_dict_set(&options,"follow_mouse","centered",0);
+    //Video frame size. The default is to capture the full screen
+    av_dict_set(&options, "video_size", "640x480", 0);
+
+    value = avformat_open_input(&pAVFormatContext, ":1.0+10,20", pAVInputFormat, &options);
     if (value != 0) {
         cout << "\nerror in opening input device";
         exit(1);
@@ -184,7 +223,7 @@ refer : https://www.ffmpeg.org/ffmpeg-devices.html#x11grab
         exit(1);
     }
 
-//	value = avformat_find_stream_info(pAVFormatContext,NULL);
+    value = avformat_find_stream_info(pAVFormatContext, NULL);
     if (value < 0) {
         cout << "\nunable to find the stream information";
         exit(1);
@@ -199,7 +238,6 @@ refer : https://www.ffmpeg.org/ffmpeg-devices.html#x11grab
             VideoStreamIndx = i;
             break;
         }
-
     }
 
     if (VideoStreamIndx == -1) {
@@ -208,19 +246,23 @@ refer : https://www.ffmpeg.org/ffmpeg-devices.html#x11grab
     }
 
     // assign pAVFormatContext to VideoStreamIndx
-//    pAVCodecContext = pAVFormatContext->streams[VideoStreamIndx]->codec;
-//
-//    pAVCodec = avcodec_find_decoder(pAVCodecContext->codec_id);
-//    if (pAVCodec == NULL) {
-//        cout << "\nunable to find the decoder";
-//        exit(1);
-//    }
-//
-//    value = avcodec_open2(pAVCodecContext, pAVCodec, NULL);//Initialize the AVCodecContext to use the given AVCodec.
-//    if (value < 0) {
-//        cout << "\nunable to open the av codec";
-//        exit(1);
-//    }
+    pAVCodecParameters = pAVFormatContext->streams[VideoStreamIndx]->codecpar;
+
+    pAVCodec = avcodec_find_decoder(pAVCodecParameters->codec_id);
+    if (pAVCodec == NULL) {
+        cout << "\nunable to find the decoder";
+        exit(1);
+    }
+    // specific for video
+    printf("\nVideo Codec: resolution %d x %d", pAVCodecParameters->width, pAVCodecParameters->height);
+    // general
+    printf("\tCodec %s ID %d bit_rate %lld", pAVCodec->long_name, pAVCodec->id, pAVCodecParameters->bit_rate);
+
+    pAVCodecContext = avcodec_alloc_context3(pAVCodec);
+    avcodec_parameters_to_context(pAVCodecContext, pAVCodecParameters);
+    value = avcodec_open2(pAVCodecContext, pAVCodec, NULL);//Initialize the AVCodecContext to use the given AVCodec.
+    this->HandleAVError(value, "unable to open the av codec");
+    return true;
 }
 
 ///* initialize the video output file and its properties  */

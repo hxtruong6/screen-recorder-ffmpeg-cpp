@@ -20,4 +20,5 @@ target_link_libraries(QtTest Qt5::Core Qt5::Widgets
         avformat
         avutil
         avdevice
+        avcodec
         )
