@@ -13,9 +13,9 @@ int main(int argc, char **argv) {
 //    return app.exec();
 
     ScreenRecorder screen_record;
-    if (screen_record.OpenCamera()) {
-//        screen_record.init_outputfile();
-//        screen_record.CaptureVideoFrames();
+    if (screen_record.RegisterDevice()) {
+        screen_record.InitOutputFile();
+        screen_record.CaptureVideoFrames();
 //        cout << "\nprogram executed successfully\n";
     }
 

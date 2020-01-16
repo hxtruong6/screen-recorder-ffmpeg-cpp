@@ -96,12 +96,9 @@ public:
     ~ScreenRecorder();
 
     /* function to initiate communication with display library */
-    bool OpenCamera();
-    void Show_dshow_device();
-//
-//    int init_outputfile();
-//
-//    int CaptureVideoFrames();
+    bool RegisterDevice();
+    int InitOutputFile();
+    int CaptureVideoFrames();
 
     void HandleAVError(int err, string msg);
 
