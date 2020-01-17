@@ -54,21 +54,21 @@ using namespace std;
 
 class ScreenRecorder {
 private:
-    AVInputFormat *pAVInputFormat;
-    AVOutputFormat *output_format;
+    AVInputFormat *inputFormat;
+    AVOutputFormat *outputFormat;
 
-    AVCodecContext *pAVCodecContext;
-    AVCodecParameters  *pAVCodecParameters;
+    AVCodecContext *codecContext;
+    AVCodecParameters  *codecParameters;
 
-    AVFormatContext *pAVFormatContext;
+    AVFormatContext *formatContext;
 
-    AVFrame *pAVFrame;
+    AVFrame *frame;
     AVFrame *outFrame;
 
-    AVCodec *pAVCodec;
-    AVCodec *outAVCodec;
+    AVCodec *codec;
+    AVCodec *outCodec;
 
-    AVPacket *pAVPacket;
+    AVPacket *avPacket;
 
     AVDictionary *options;
 

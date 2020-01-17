@@ -16,16 +16,16 @@ ScreenRecorder::ScreenRecorder() {
 /* uninitialize the resources */
 ScreenRecorder::~ScreenRecorder() {
 
-    avformat_close_input(&pAVFormatContext);
-    if (!pAVFormatContext) {
+    avformat_close_input(&formatContext);
+    if (!formatContext) {
         cout << "\nfile closed sucessfully";
     } else {
         cout << "\nunable to close the file";
         exit(1);
     }
 
-    avformat_free_context(pAVFormatContext);
-    if (!pAVFormatContext) {
+    avformat_free_context(formatContext);
+    if (!formatContext) {
         cout << "\navformat free successfully";
     } else {
         cout << "\nunable to free avformat context";
@@ -44,11 +44,11 @@ int ScreenRecorder::CaptureVideoFrames() {
     int frame_index = 0;
     value = 0;
 
-    pAVPacket = (AVPacket *) av_malloc(sizeof(AVPacket));
-    av_init_packet(pAVPacket);
+    avPacket = (AVPacket *) av_malloc(sizeof(AVPacket));
+    av_init_packet(avPacket);
 
-    pAVFrame = av_frame_alloc();
-    if (!pAVFrame) {
+    frame = av_frame_alloc();
+    if (!frame) {
         cout << "\nunable to release the avframe resources";
         exit(1);
     }
@@ -81,9 +81,9 @@ int ScreenRecorder::CaptureVideoFrames() {
     // Allocate and return swsContext.
     // a pointer to an allocated context, or NULL in case of error
     // Deprecated : Use sws_getCachedContext() instead.
-    swsCtx_ = sws_getContext(pAVCodecContext->width,
-                             pAVCodecContext->height,
-                             pAVCodecContext->pix_fmt,
+    swsCtx_ = sws_getContext(codecContext->width,
+                             codecContext->height,
+                             codecContext->pix_fmt,
                              outAVCodecContext->width,
                              outAVCodecContext->height,
                              outAVCodecContext->pix_fmt,
@@ -100,17 +100,17 @@ int ScreenRecorder::CaptureVideoFrames() {
 
     int got_picture;
 
-    while (av_read_frame(pAVFormatContext, pAVPacket) >= 0) {
+    while (av_read_frame(formatContext, avPacket) >= 0) {
         if (ii++ == no_frames)break;
-        if (pAVPacket->stream_index == VideoStreamIndx) {
-            value = avcodec_decode_video2(pAVCodecContext, pAVFrame, &frameFinished, pAVPacket);
+        if (avPacket->stream_index == VideoStreamIndx) {
+            value = avcodec_decode_video2(codecContext, frame, &frameFinished, avPacket);
             if (value < 0) {
                 cout << "unable to decode video";
             }
 
             if (frameFinished)// Frame successfully decoded :)
             {
-                sws_scale(swsCtx_, pAVFrame->data, pAVFrame->linesize, 0, pAVCodecContext->height, outFrame->data,
+                sws_scale(swsCtx_, frame->data, frame->linesize, 0, codecContext->height, outFrame->data,
                           outFrame->linesize);
                 av_init_packet(&outPacket);
                 outPacket.data = NULL;    // packet data will be allocated by the encoder
@@ -163,8 +163,8 @@ void ScreenRecorder::HandleAVError(int err, string msg = "") {
 bool ScreenRecorder::RegisterDevice() {
     value = 0;
     options = NULL;
-    pAVFormatContext = NULL;
-    pAVFormatContext = avformat_alloc_context();//Allocate an AVFormatContext.
+    formatContext = NULL;
+    formatContext = avformat_alloc_context();//Allocate an AVFormatContext.
 /*
 
 X11 video input device.
@@ -173,7 +173,7 @@ This device allows one to capture a region of an X11 display.
 refer : https://www.ffmpeg.org/ffmpeg-devices.html#x11grab
 */
     /* current below is for screen recording. to connect with camera use v4l2 as a input parameter for av_find_input_format */
-    pAVInputFormat = av_find_input_format("x11grab");
+    inputFormat = av_find_input_format("x11grab");
 
     //Set some options
     //grabbing frame rate
@@ -183,7 +183,7 @@ refer : https://www.ffmpeg.org/ffmpeg-devices.html#x11grab
     //Video frame size. The default is to capture the full screen
     av_dict_set(&options, "video_size", "640x480", 0);
 
-    value = avformat_open_input(&pAVFormatContext, ":1.0+10,20", pAVInputFormat, &options);
+    value = avformat_open_input(&formatContext, ":1.0+10,20", inputFormat, &options);
     if (value != 0) {
         cout << "\nerror in opening input device";
         exit(1);
@@ -202,7 +202,7 @@ refer : https://www.ffmpeg.org/ffmpeg-devices.html#x11grab
         exit(1);
     }
 
-    value = avformat_find_stream_info(pAVFormatContext, NULL);
+    value = avformat_find_stream_info(formatContext, NULL);
     if (value < 0) {
         cout << "\nunable to find the stream information";
         exit(1);
@@ -211,9 +211,9 @@ refer : https://www.ffmpeg.org/ffmpeg-devices.html#x11grab
     VideoStreamIndx = -1;
 
     /* find the first video stream index . Also there is an API available to do the below operations */
-    for (int i = 0; i < pAVFormatContext->nb_streams; i++) // find video stream posistion/index.
+    for (int i = 0; i < formatContext->nb_streams; i++) // find video stream posistion/index.
     {
-        if (pAVFormatContext->streams[i]->codecpar->codec_type == AVMEDIA_TYPE_VIDEO) {
+        if (formatContext->streams[i]->codecpar->codec_type == AVMEDIA_TYPE_VIDEO) {
             VideoStreamIndx = i;
             break;
         }
@@ -224,22 +224,22 @@ refer : https://www.ffmpeg.org/ffmpeg-devices.html#x11grab
         exit(1);
     }
 
-    // assign pAVFormatContext to VideoStreamIndx
-    pAVCodecParameters = pAVFormatContext->streams[VideoStreamIndx]->codecpar;
+    // assign formatContext to VideoStreamIndx
+    codecParameters = formatContext->streams[VideoStreamIndx]->codecpar;
 
-    pAVCodec = avcodec_find_decoder(pAVCodecParameters->codec_id);
-    if (pAVCodec == NULL) {
+    codec = avcodec_find_decoder(codecParameters->codec_id);
+    if (codec == NULL) {
         cout << "\nunable to find the decoder";
         exit(1);
     }
     // specific for video
-    printf("\nVideo Codec: resolution %d x %d", pAVCodecParameters->width, pAVCodecParameters->height);
+    printf("\nVideo Codec: resolution %d x %d", codecParameters->width, codecParameters->height);
     // general
-    printf("\tCodec %s ID %d bit_rate %lld", pAVCodec->long_name, pAVCodec->id, pAVCodecParameters->bit_rate);
+    printf("\tCodec %s ID %d bit_rate %lld", codec->long_name, codec->id, codecParameters->bit_rate);
 
-    pAVCodecContext = avcodec_alloc_context3(pAVCodec);
-    avcodec_parameters_to_context(pAVCodecContext, pAVCodecParameters);
-    value = avcodec_open2(pAVCodecContext, pAVCodec, NULL);//Initialize the AVCodecContext to use the given AVCodec.
+    codecContext = avcodec_alloc_context3(codec);
+    avcodec_parameters_to_context(codecContext, codecParameters);
+    value = avcodec_open2(codecContext, codec, NULL);//Initialize the AVCodecContext to use the given AVCodec.
     this->HandleAVError(value, "unable to open the av codec");
     return true;
 }
@@ -257,8 +257,8 @@ int ScreenRecorder::InitOutputFile() {
     }
 
 /* Returns the output format in the list of registered output formats which best matches the provided parameters, or returns NULL if there is no match. */
-    output_format = av_guess_format(NULL, output_file, NULL);
-    if (!output_format) {
+    outputFormat = av_guess_format(NULL, output_file, NULL);
+    if (!outputFormat) {
         cout << "\nerror in guessing the video format. try with correct format";
         exit(1);
     }
@@ -332,8 +332,8 @@ int ScreenRecorder::InitOutputFile() {
     }
 
     // uncomment here to view the complete video file informations
-    cout<<"\n\nOutput file information :\n\n";
-    av_dump_format(outAVFormatContext , 0 ,output_file ,1);
+    cout << "\n\nOutput file information :\n\n";
+    av_dump_format(outAVFormatContext, 0, output_file, 1);
 }
 
 
