@@ -4,6 +4,8 @@ file(REMOVE_RECURSE
   "QtTest_autogen"
   "CMakeFiles/QtTest.dir/QtTest_autogen/mocs_compilation.cpp.o"
   "CMakeFiles/QtTest.dir/main.cpp.o"
+  "CMakeFiles/QtTest.dir/src/RecordManager.cpp.o"
+  "CMakeFiles/QtTest.dir/src/ScreenRecord.cpp.o"
   "CMakeFiles/QtTest.dir/src/ScreenRecorder.cpp.o"
   "QtTest"
   "QtTest.pdb"

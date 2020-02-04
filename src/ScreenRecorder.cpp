@@ -35,120 +35,120 @@ ScreenRecorder::~ScreenRecorder() {
 }
 
 /* function to capture and store data in frames by allocating required memory and auto deallocating the memory.   */
-int ScreenRecorder::CaptureVideoFrames() {
-    int flag;
-    // when you decode a single packet, you still don't have information enough to have a frame [depending on the type of codec, some of them you do],
-    // when you decode a GROUP of packets that represents a frame, then you have a picture! that's why frameFinished will let
-    // you know you decoded enough to have a frame.
-    int frameFinished;
-    int frame_index = 0;
-    value = 0;
-
-    avPacket = (AVPacket *) av_malloc(sizeof(AVPacket));
-    av_init_packet(avPacket);
-
-    frame = av_frame_alloc();
-    if (!frame) {
-        cout << "\nunable to release the avframe resources";
-        exit(1);
-    }
-
-    outFrame = av_frame_alloc();//Allocate an AVFrame and set its fields to default values.
-    if (!outFrame) {
-        cout << "\nunable to release the avframe resources for outframe";
-        exit(1);
-    }
-
-    int video_outbuf_size;
-    int nbytes = av_image_get_buffer_size(outAVCodecContext->pix_fmt, outAVCodecContext->width,
-                                          outAVCodecContext->height, 32);
-    uint8_t *video_outbuf = (uint8_t *) av_malloc(nbytes);
-    if (video_outbuf == NULL) {
-        cout << "\nunable to allocate memory";
-        exit(1);
-    }
-
-    // Setup the data pointers and linesizes based on the specified image parameters and the provided array.
-    value = av_image_fill_arrays(outFrame->data, outFrame->linesize, video_outbuf, AV_PIX_FMT_YUV420P,
-                                 outAVCodecContext->width, outAVCodecContext->height,
-                                 1); // returns : the size in bytes required for src
-    if (value < 0) {
-        cout << "\nerror in filling image array";
-    }
-
-    SwsContext *swsCtx_;
-
-    // Allocate and return swsContext.
-    // a pointer to an allocated context, or NULL in case of error
-    // Deprecated : Use sws_getCachedContext() instead.
-    swsCtx_ = sws_getContext(codecContext->width,
-                             codecContext->height,
-                             codecContext->pix_fmt,
-                             outAVCodecContext->width,
-                             outAVCodecContext->height,
-                             outAVCodecContext->pix_fmt,
-                             SWS_BICUBIC, NULL, NULL, NULL);
-
-
-    int ii = 0;
-    int no_frames = 100;
-    cout << "\nenter No. of frames to capture : ";
-    cin >> no_frames;
-
-    AVPacket outPacket;
-    int j = 0;
-
-    int got_picture;
-
-    while (av_read_frame(formatContext, avPacket) >= 0) {
-        if (ii++ == no_frames)break;
-        if (avPacket->stream_index == VideoStreamIndx) {
-            value = avcodec_decode_video2(codecContext, frame, &frameFinished, avPacket);
-            if (value < 0) {
-                cout << "unable to decode video";
-            }
-
-            if (frameFinished)// Frame successfully decoded :)
-            {
-                sws_scale(swsCtx_, frame->data, frame->linesize, 0, codecContext->height, outFrame->data,
-                          outFrame->linesize);
-                av_init_packet(&outPacket);
-                outPacket.data = NULL;    // packet data will be allocated by the encoder
-                outPacket.size = 0;
-
-                avcodec_encode_video2(outAVCodecContext, &outPacket, outFrame, &got_picture);
-
-                if (got_picture) {
-                    if (outPacket.pts != AV_NOPTS_VALUE)
-                        outPacket.pts = av_rescale_q(outPacket.pts, video_st->codec->time_base, video_st->time_base);
-                    if (outPacket.dts != AV_NOPTS_VALUE)
-                        outPacket.dts = av_rescale_q(outPacket.dts, video_st->codec->time_base, video_st->time_base);
-
-                    printf("Write frame %3d (size= %2d)\n", j++, outPacket.size / 1000);
-                    if (av_write_frame(outAVFormatContext, &outPacket) != 0) {
-                        cout << "\nerror in writing video frame";
-                    }
-
-                    av_packet_unref(&outPacket);
-                } // got_picture
-
-                av_packet_unref(&outPacket);
-            } // frameFinished
-
-        }
-    }// End of while-loop
-
-    value = av_write_trailer(outAVFormatContext);
-    if (value < 0) {
-        cout << "\nerror in writing av trailer";
-        exit(1);
-    }
-
-
-//THIS WAS ADDED LATER
-    av_free(video_outbuf);
-
-}
+//int ScreenRecorder::CaptureVideoFrames() {
+//    int flag;
+//    // when you decode a single packet, you still don't have information enough to have a frame [depending on the type of codec, some of them you do],
+//    // when you decode a GROUP of packets that represents a frame, then you have a picture! that's why frameFinished will let
+//    // you know you decoded enough to have a frame.
+//    int frameFinished;
+//    int frame_index = 0;
+//    value = 0;
+//
+//    avPacket = (AVPacket *) av_malloc(sizeof(AVPacket));
+//    av_init_packet(avPacket);
+//
+//    frame = av_frame_alloc();
+//    if (!frame) {
+//        cout << "\nunable to release the avframe resources";
+//        exit(1);
+//    }
+//
+//    outFrame = av_frame_alloc();//Allocate an AVFrame and set its fields to default values.
+//    if (!outFrame) {
+//        cout << "\nunable to release the avframe resources for outframe";
+//        exit(1);
+//    }
+//
+//    int video_outbuf_size;
+//    int nbytes = av_image_get_buffer_size(outAVCodecContext->pix_fmt, outAVCodecContext->width,
+//                                          outAVCodecContext->height, 32);
+//    uint8_t *video_outbuf = (uint8_t *) av_malloc(nbytes);
+//    if (video_outbuf == NULL) {
+//        cout << "\nunable to allocate memory";
+//        exit(1);
+//    }
+//
+//    // Setup the data pointers and linesizes based on the specified image parameters and the provided array.
+//    value = av_image_fill_arrays(outFrame->data, outFrame->linesize, video_outbuf, AV_PIX_FMT_YUV420P,
+//                                 outAVCodecContext->width, outAVCodecContext->height,
+//                                 1); // returns : the size in bytes required for src
+//    if (value < 0) {
+//        cout << "\nerror in filling image array";
+//    }
+//
+//    SwsContext *swsCtx_;
+//
+//    // Allocate and return swsContext.
+//    // a pointer to an allocated context, or NULL in case of error
+//    // Deprecated : Use sws_getCachedContext() instead.
+//    swsCtx_ = sws_getContext(codecContext->width,
+//                             codecContext->height,
+//                             codecContext->pix_fmt,
+//                             outAVCodecContext->width,
+//                             outAVCodecContext->height,
+//                             outAVCodecContext->pix_fmt,
+//                             SWS_BICUBIC, NULL, NULL, NULL);
+//
+//
+//    int ii = 0;
+//    int no_frames = 100;
+//    cout << "\nenter No. of frames to capture : ";
+//    cin >> no_frames;
+//
+//    AVPacket outPacket;
+//    int j = 0;
+//
+//    int got_picture;
+//
+//    while (av_read_frame(formatContext, avPacket) >= 0) {
+//        if (ii++ == no_frames)break;
+//        if (avPacket->stream_index == VideoStreamIndx) {
+//            value = avcodec_decode_video2(codecContext, frame, &frameFinished, avPacket);
+//            if (value < 0) {
+//                cout << "unable to decode video";
+//            }
+//
+//            if (frameFinished)// Frame successfully decoded :)
+//            {
+//                sws_scale(swsCtx_, frame->data, frame->linesize, 0, codecContext->height, outFrame->data,
+//                          outFrame->linesize);
+//                av_init_packet(&outPacket);
+//                outPacket.data = NULL;    // packet data will be allocated by the encoder
+//                outPacket.size = 0;
+//
+//                avcodec_encode_video2(outAVCodecContext, &outPacket, outFrame, &got_picture);
+//
+//                if (got_picture) {
+//                    if (outPacket.pts != AV_NOPTS_VALUE)
+//                        outPacket.pts = av_rescale_q(outPacket.pts, video_st->codec->time_base, video_st->time_base);
+//                    if (outPacket.dts != AV_NOPTS_VALUE)
+//                        outPacket.dts = av_rescale_q(outPacket.dts, video_st->codec->time_base, video_st->time_base);
+//
+//                    printf("Write frame %3d (size= %2d)\n", j++, outPacket.size / 1000);
+//                    if (av_write_frame(outAVFormatContext, &outPacket) != 0) {
+//                        cout << "\nerror in writing video frame";
+//                    }
+//
+//                    av_packet_unref(&outPacket);
+//                } // got_picture
+//
+//                av_packet_unref(&outPacket);
+//            } // frameFinished
+//
+//        }
+//    }// End of while-loop
+//
+//    value = av_write_trailer(outAVFormatContext);
+//    if (value < 0) {
+//        cout << "\nerror in writing av trailer";
+//        exit(1);
+//    }
+//
+//
+////THIS WAS ADDED LATER
+//    av_free(video_outbuf);
+//
+//}
 
 void ScreenRecorder::HandleAVError(int err, string msg = "") {
     if (err < 0) {
@@ -235,7 +235,7 @@ refer : https://www.ffmpeg.org/ffmpeg-devices.html#x11grab
     // specific for video
     printf("\nVideo Codec: resolution %d x %d", codecParameters->width, codecParameters->height);
     // general
-    printf("\tCodec %s ID %d bit_rate %lld", codec->long_name, codec->id, codecParameters->bit_rate);
+    printf("\tCodec %s ID %d bit_rate %ld", codec->long_name, codec->id, codecParameters->bit_rate);
 
     codecContext = avcodec_alloc_context3(codec);
     avcodec_parameters_to_context(codecContext, codecParameters);
@@ -250,13 +250,14 @@ int ScreenRecorder::InitOutputFile() {
     value = 0;
     output_file = "../output/output.mp4";
 
-    avformat_alloc_output_context2(&outAVFormatContext, NULL, NULL, output_file);
+//    avformat_alloc_output_context2(&outAVFormatContext, NULL, NULL, output_file);
+    outAVFormatContext = formatContext;
     if (!outAVFormatContext) {
         cout << "\nerror in allocating av format output context";
         exit(1);
     }
 
-/* Returns the output format in the list of registered output formats which best matches the provided parameters, or returns NULL if there is no match. */
+    /* Returns the output format in the list of registered output formats which best matches the provided parameters, or returns NULL if there is no match. */
     outputFormat = av_guess_format(NULL, output_file, NULL);
     if (!outputFormat) {
         cout << "\nerror in guessing the video format. try with correct format";
@@ -269,14 +270,17 @@ int ScreenRecorder::InitOutputFile() {
         exit(1);
     }
 
-    outAVCodecContext = avcodec_alloc_context3(outAVCodec);
+    outAVCodecContext = avcodec_alloc_context3(outCodec);
     if (!outAVCodecContext) {
         cout << "\nerror in allocating the codec contexts";
         exit(1);
     }
 
     /* set property of the video file */
-    outAVCodecContext = video_st->codec;
+//    outAVCodecContext
+    AVCodecParameters* avCodecParameters = video_st->codecpar;
+//    outCodec
+//    outAVCodecContext = avcodec_find_decoder(avCodecParameters->codec_id);
     outAVCodecContext->codec_id = AV_CODEC_ID_MPEG4;// AV_CODEC_ID_MPEG4; // AV_CODEC_ID_H264 // AV_CODEC_ID_MPEG1VIDEO
     outAVCodecContext->codec_type = AVMEDIA_TYPE_VIDEO;
     outAVCodecContext->pix_fmt = AV_PIX_FMT_YUV420P;
@@ -292,8 +296,8 @@ int ScreenRecorder::InitOutputFile() {
         av_opt_set(outAVCodecContext->priv_data, "preset", "slow", 0);
     }
 
-    outAVCodec = avcodec_find_encoder(AV_CODEC_ID_MPEG4);
-    if (!outAVCodec) {
+    outCodec = avcodec_find_encoder(AV_CODEC_ID_MPEG4);
+    if (!outCodec) {
         cout << "\nerror in finding the av codecs. try again with correct codec";
         exit(1);
     }
@@ -305,7 +309,7 @@ int ScreenRecorder::InitOutputFile() {
         outAVCodecContext->flags |= AV_CODEC_FLAG_GLOBAL_HEADER;
     }
 
-    value = avcodec_open2(outAVCodecContext, outAVCodec, NULL);
+    value = avcodec_open2(outAVCodecContext, outCodec, NULL);
     if (value < 0) {
         cout << "\nerror in opening the avcodec";
         exit(1);

@@ -3,8 +3,18 @@
 
 CMakeFiles/QtTest.dir/QtTest_autogen/mocs_compilation.cpp.o: QtTest_autogen/mocs_compilation.cpp
 
+CMakeFiles/QtTest.dir/main.cpp.o: ../include/RecordManager.h
+CMakeFiles/QtTest.dir/main.cpp.o: ../include/ScreenRecord.h
 CMakeFiles/QtTest.dir/main.cpp.o: ../include/ScreenRecorder.h
 CMakeFiles/QtTest.dir/main.cpp.o: ../main.cpp
+
+CMakeFiles/QtTest.dir/src/RecordManager.cpp.o: ../include/RecordManager.h
+CMakeFiles/QtTest.dir/src/RecordManager.cpp.o: ../include/ScreenRecord.h
+CMakeFiles/QtTest.dir/src/RecordManager.cpp.o: ../src/RecordManager.cpp
+
+CMakeFiles/QtTest.dir/src/ScreenRecord.cpp.o: ../include/RecordManager.h
+CMakeFiles/QtTest.dir/src/ScreenRecord.cpp.o: ../include/ScreenRecord.h
+CMakeFiles/QtTest.dir/src/ScreenRecord.cpp.o: ../src/ScreenRecord.cpp
 
 CMakeFiles/QtTest.dir/src/ScreenRecorder.cpp.o: ../include/ScreenRecorder.h
 CMakeFiles/QtTest.dir/src/ScreenRecorder.cpp.o: ../src/ScreenRecorder.cpp

@@ -13,7 +13,7 @@ set(CMAKE_AUTOUIC ON)
 find_package(Qt5 COMPONENTS Core Widgets REQUIRED)
 
 #add_library(QtTest libavformat libavutil)
-add_executable(QtTest main.cpp src/ScreenRecorder.cpp include/ScreenRecorder.h)
+add_executable(QtTest main.cpp src/ScreenRecorder.cpp include/ScreenRecorder.h src/RecordManager.cpp include/RecordManager.h src/ScreenRecord.cpp include/ScreenRecord.h)
 
 # Link the library to the executable
 target_link_libraries(QtTest Qt5::Core Qt5::Widgets

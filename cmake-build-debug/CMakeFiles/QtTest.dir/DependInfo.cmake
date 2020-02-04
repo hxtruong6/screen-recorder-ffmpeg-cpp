@@ -6,6 +6,8 @@ set(CMAKE_DEPENDS_LANGUAGES
 set(CMAKE_DEPENDS_CHECK_CXX
   "/home/hxtruong/CLionProjects/QtTest/cmake-build-debug/QtTest_autogen/mocs_compilation.cpp" "/home/hxtruong/CLionProjects/QtTest/cmake-build-debug/CMakeFiles/QtTest.dir/QtTest_autogen/mocs_compilation.cpp.o"
   "/home/hxtruong/CLionProjects/QtTest/main.cpp" "/home/hxtruong/CLionProjects/QtTest/cmake-build-debug/CMakeFiles/QtTest.dir/main.cpp.o"
+  "/home/hxtruong/CLionProjects/QtTest/src/RecordManager.cpp" "/home/hxtruong/CLionProjects/QtTest/cmake-build-debug/CMakeFiles/QtTest.dir/src/RecordManager.cpp.o"
+  "/home/hxtruong/CLionProjects/QtTest/src/ScreenRecord.cpp" "/home/hxtruong/CLionProjects/QtTest/cmake-build-debug/CMakeFiles/QtTest.dir/src/ScreenRecord.cpp.o"
   "/home/hxtruong/CLionProjects/QtTest/src/ScreenRecorder.cpp" "/home/hxtruong/CLionProjects/QtTest/cmake-build-debug/CMakeFiles/QtTest.dir/src/ScreenRecorder.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")

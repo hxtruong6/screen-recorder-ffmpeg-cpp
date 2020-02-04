@@ -4,8 +4,18 @@
 CMakeFiles/QtTest.dir/QtTest_autogen/mocs_compilation.cpp.o
  /home/hxtruong/CLionProjects/QtTest/cmake-build-debug/QtTest_autogen/mocs_compilation.cpp
 CMakeFiles/QtTest.dir/main.cpp.o
+ /home/hxtruong/CLionProjects/QtTest/include/RecordManager.h
+ /home/hxtruong/CLionProjects/QtTest/include/ScreenRecord.h
  /home/hxtruong/CLionProjects/QtTest/include/ScreenRecorder.h
  /home/hxtruong/CLionProjects/QtTest/main.cpp
+CMakeFiles/QtTest.dir/src/RecordManager.cpp.o
+ /home/hxtruong/CLionProjects/QtTest/include/RecordManager.h
+ /home/hxtruong/CLionProjects/QtTest/include/ScreenRecord.h
+ /home/hxtruong/CLionProjects/QtTest/src/RecordManager.cpp
+CMakeFiles/QtTest.dir/src/ScreenRecord.cpp.o
+ /home/hxtruong/CLionProjects/QtTest/include/RecordManager.h
+ /home/hxtruong/CLionProjects/QtTest/include/ScreenRecord.h
+ /home/hxtruong/CLionProjects/QtTest/src/ScreenRecord.cpp
 CMakeFiles/QtTest.dir/src/ScreenRecorder.cpp.o
  /home/hxtruong/CLionProjects/QtTest/include/ScreenRecorder.h
  /home/hxtruong/CLionProjects/QtTest/src/ScreenRecorder.cpp

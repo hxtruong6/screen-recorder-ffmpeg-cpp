@@ -6,6 +6,16 @@
 
 #IncludeRegexTransform: 
 
+/home/hxtruong/CLionProjects/QtTest/include/RecordManager.h
+ScreenRecord.h
+/home/hxtruong/CLionProjects/QtTest/include/ScreenRecord.h
+iostream
+-
+
+/home/hxtruong/CLionProjects/QtTest/include/ScreenRecord.h
+RecordManager.h
+/home/hxtruong/CLionProjects/QtTest/include/RecordManager.h
+
 /home/hxtruong/CLionProjects/QtTest/include/ScreenRecorder.h
 iostream
 -
@@ -65,8 +75,14 @@ libswscale/swscale.h
 /home/hxtruong/CLionProjects/QtTest/main.cpp
 include/ScreenRecorder.h
 /home/hxtruong/CLionProjects/QtTest/include/ScreenRecorder.h
+include/RecordManager.h
+/home/hxtruong/CLionProjects/QtTest/include/RecordManager.h
 
-/home/hxtruong/CLionProjects/QtTest/src/ScreenRecorder.cpp
-../include/ScreenRecorder.h
-/home/hxtruong/CLionProjects/QtTest/include/ScreenRecorder.h
+/home/hxtruong/CLionProjects/QtTest/src/RecordManager.cpp
+../include/RecordManager.h
+/home/hxtruong/CLionProjects/QtTest/include/RecordManager.h
+
+/home/hxtruong/CLionProjects/QtTest/src/ScreenRecord.cpp
+../include/ScreenRecord.h
+/home/hxtruong/CLionProjects/QtTest/include/ScreenRecord.h
 

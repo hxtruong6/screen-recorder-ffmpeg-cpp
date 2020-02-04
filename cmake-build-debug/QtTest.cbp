@@ -115,10 +115,22 @@
 		<Unit filename="/home/hxtruong/CLionProjects/QtTest/cmake-build-debug/QtTest_autogen/mocs_compilation.cpp">
 			<Option target="QtTest"/>
 		</Unit>
+		<Unit filename="/home/hxtruong/CLionProjects/QtTest/include/RecordManager.h">
+			<Option target="QtTest"/>
+		</Unit>
+		<Unit filename="/home/hxtruong/CLionProjects/QtTest/include/ScreenRecord.h">
+			<Option target="QtTest"/>
+		</Unit>
 		<Unit filename="/home/hxtruong/CLionProjects/QtTest/include/ScreenRecorder.h">
 			<Option target="QtTest"/>
 		</Unit>
 		<Unit filename="/home/hxtruong/CLionProjects/QtTest/main.cpp">
+			<Option target="QtTest"/>
+		</Unit>
+		<Unit filename="/home/hxtruong/CLionProjects/QtTest/src/RecordManager.cpp">
+			<Option target="QtTest"/>
+		</Unit>
+		<Unit filename="/home/hxtruong/CLionProjects/QtTest/src/ScreenRecord.cpp">
 			<Option target="QtTest"/>
 		</Unit>
 		<Unit filename="/home/hxtruong/CLionProjects/QtTest/src/ScreenRecorder.cpp">

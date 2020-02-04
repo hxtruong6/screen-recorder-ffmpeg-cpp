@@ -190,6 +190,60 @@ main.cpp.s:
 	$(MAKE) -f CMakeFiles/QtTest.dir/build.make CMakeFiles/QtTest.dir/main.cpp.s
 .PHONY : main.cpp.s
 
+src/RecordManager.o: src/RecordManager.cpp.o
+
+.PHONY : src/RecordManager.o
+
+# target to build an object file
+src/RecordManager.cpp.o:
+	$(MAKE) -f CMakeFiles/QtTest.dir/build.make CMakeFiles/QtTest.dir/src/RecordManager.cpp.o
+.PHONY : src/RecordManager.cpp.o
+
+src/RecordManager.i: src/RecordManager.cpp.i
+
+.PHONY : src/RecordManager.i
+
+# target to preprocess a source file
+src/RecordManager.cpp.i:
+	$(MAKE) -f CMakeFiles/QtTest.dir/build.make CMakeFiles/QtTest.dir/src/RecordManager.cpp.i
+.PHONY : src/RecordManager.cpp.i
+
+src/RecordManager.s: src/RecordManager.cpp.s
+
+.PHONY : src/RecordManager.s
+
+# target to generate assembly for a file
+src/RecordManager.cpp.s:
+	$(MAKE) -f CMakeFiles/QtTest.dir/build.make CMakeFiles/QtTest.dir/src/RecordManager.cpp.s
+.PHONY : src/RecordManager.cpp.s
+
+src/ScreenRecord.o: src/ScreenRecord.cpp.o
+
+.PHONY : src/ScreenRecord.o
+
+# target to build an object file
+src/ScreenRecord.cpp.o:
+	$(MAKE) -f CMakeFiles/QtTest.dir/build.make CMakeFiles/QtTest.dir/src/ScreenRecord.cpp.o
+.PHONY : src/ScreenRecord.cpp.o
+
+src/ScreenRecord.i: src/ScreenRecord.cpp.i
+
+.PHONY : src/ScreenRecord.i
+
+# target to preprocess a source file
+src/ScreenRecord.cpp.i:
+	$(MAKE) -f CMakeFiles/QtTest.dir/build.make CMakeFiles/QtTest.dir/src/ScreenRecord.cpp.i
+.PHONY : src/ScreenRecord.cpp.i
+
+src/ScreenRecord.s: src/ScreenRecord.cpp.s
+
+.PHONY : src/ScreenRecord.s
+
+# target to generate assembly for a file
+src/ScreenRecord.cpp.s:
+	$(MAKE) -f CMakeFiles/QtTest.dir/build.make CMakeFiles/QtTest.dir/src/ScreenRecord.cpp.s
+.PHONY : src/ScreenRecord.cpp.s
+
 src/ScreenRecorder.o: src/ScreenRecorder.cpp.o
 
 .PHONY : src/ScreenRecorder.o
@@ -233,6 +287,12 @@ help:
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"
+	@echo "... src/RecordManager.o"
+	@echo "... src/RecordManager.i"
+	@echo "... src/RecordManager.s"
+	@echo "... src/ScreenRecord.o"
+	@echo "... src/ScreenRecord.i"
+	@echo "... src/ScreenRecord.s"
 	@echo "... src/ScreenRecorder.o"
 	@echo "... src/ScreenRecorder.i"
 	@echo "... src/ScreenRecorder.s"
